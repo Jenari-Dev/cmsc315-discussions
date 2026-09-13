@@ -26,8 +26,14 @@ def linear_search(lst, target):
     - Add comments explaining why linear search
       has O(n) time complexity.
     """
-    pass
-
+    #Linear search checks each element one at a time from the start.
+    for i in range(len(lst)):
+        #If this element matches, return its index.
+        if lst[i] == target:
+            return i
+    #Not found after checking every element -> -1.
+    return -1
+    #O(n): in the worst case, missing or last, it checks all n elements.
 
 def binary_search(lst, target):
     """
@@ -42,8 +48,19 @@ def binary_search(lst, target):
     - Add comments explaining how each iteration
       reduces the search space.
     """
-    pass
-
+    low = 0
+    high = len(lst) - 1
+    #Keep going while there is still a range to search.
+    while low <= high:
+        mid = (low + high) // 2     #Middle of the current range.
+        if lst[mid] == target:
+            return mid              #Found.
+        elif lst[mid] < target:
+            low = mid + 1           #Target bigger -> search right half.
+        else:
+            high = mid - 1          #Target smaller -> search left half.
+    return -1                       #Range emptied -> not found.
+    #Each step cuts the remaining range in half -> 0(log n) (divide and conquer).
 
 def main():
     print("=== UNIT 5: SEARCH ALGORITHMS ===")
@@ -61,7 +78,12 @@ def main():
     # 4. Use comments to clearly explain the results.
 
     print("\n=== SMALL DATASET TEST ===")
-    print("TODO: Create a small dataset and test both searches.")
+    small = [10, 23, 34, 45, 56, 67, 78]        #Must be sorted for binary search.
+    print("Small data set:", small)
+    print("Linear search for 45:", linear_search(small, 45))    #Exists -> index 3.
+    print("Binary search for 45:", binary_search(small, 45))    #Exists -> index 3.
+    print("Linear search for 50:", linear_search(small, 50))    #Missing -> -1.
+    print("Binary search for 50:", binary_search(small, 50))    #Missing -> -1.
 
     # ===============================
     # TODO (Student): LARGE DATASET
@@ -75,7 +97,12 @@ def main():
     #    efficient as datasets grow larger.
 
     print("\n=== LARGE DATASET TEST ===")
-    print("TODO: Create a larger dataset and compare results.")
+    large = list(range(0, 100000, 2))       #50,000 sorted even numbers.
+    target = 99998                          #The last element = worst case for linear.
+    print("Large dataset size:", len(large))
+    print("Linear search for 99998:", linear_search(large, target))
+    print("Binary search for 99998:", binary_search(large, target))
+    #Linear had to check -50,000 elements to reach the last one. while binary found it in about log2(50000) -= 16 steps. This is why binary search scales far better as the dataset grows.
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -93,7 +120,11 @@ def main():
     # Explain what happens in each case.
 
     print("\n=== EDGE CASE TESTS ===")
-    print("TODO: Demonstrate and explain edge cases.")
+    print("Binary search on empty list:", binary_search([], 5))                     # -1
+    print("Linear search on empty list:", linear_search([], 5))                     # -1
+    print("Binary search single element [42] for 42:", binary_search([42], 42))     # 0
+    print("Linear search first element (10):", linear_search(small, 10))                # 0
+    print("Binary search last element (78):", binary_search(small, 78))                 # 6
 
 
 if __name__ == "__main__":
